@@ -1,10 +1,13 @@
 //screen to display the booking timings
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reserve_newest1/models/bookings.dart';
 import 'package:reserve_newest1/screens/add_bookings_screen.dart';
+import 'package:reserve_newest1/screens/edit_bookings_screen.dart';
+import 'package:reserve_newest1/services/auth_services.dart';
 import 'package:reserve_newest1/services/firestore_services.dart';
 import 'package:reserve_newest1/widgets/app_drawer.dart';
 import 'package:reserve_newest1/widgets/bookings_list.dart';
@@ -21,6 +24,8 @@ class BookingsListScreen extends StatefulWidget {
 
 class _BookingsListScreenState extends State<BookingsListScreen> {
   late Map<DateTime, List<Bookings>> selectedBookings;
+
+  AuthService authService = AuthService();
 
   // @override
   // Widget build(BuildContext context) {
@@ -64,6 +69,39 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
 
   FireStoreServices fsServices = FireStoreServices();
   late Stream<List<Bookings>> bookingsStream;
+
+  Stream<List<Bookings>> getBookingsbyDate() {
+    return FirebaseFirestore.instance
+        .collection('bookings')
+        .where('email', isEqualTo: authService.getCurrentUser()!.email)
+        .where('dateofbooking', isEqualTo: selectedDay)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map<Bookings> ((doc) => Bookings.fromMap(doc.data(), doc.id))
+        .toList());
+  }
+
+  removeBooking(String? id) {
+    showDialog<Null>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Confirmation'),
+            content: Text('Are you sure you want to delete?'),
+            actions: [
+              TextButton(onPressed: (){
+                setState(() {
+                  fsServices.removeBookings(id);
+                });
+                Navigator.of(context).pop();
+              }, child: Text('Yes')),
+              TextButton(onPressed: (){
+                Navigator.of(context).pop();
+              }, child: Text('No')),
+            ],
+          );
+        });
+  }
 
 
   @override
@@ -155,9 +193,37 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
                   ),
                 ),
               ),
-              SingleChildScrollView(
-                child: BookingsList(),
-              ),
+              StreamBuilder<List<Bookings>>(
+                stream: getBookingsbyDate(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Text('No booking on this date');
+                  } if (snapshot.data!.length == 0) {
+                    return Text('No booking on this date');
+                  }
+                  return ListView.separated(
+                  shrinkWrap: true,
+                  itemBuilder: (ctx, i) {
+                    return ListTile(
+                      leading: Icon(Icons.access_alarm),
+                      title: Text(snapshot.data![i].startofbooking! + ' - ' + snapshot.data![i].endofbooking!),
+                      subtitle: Text(snapshot.data![i].level! + ', ' + snapshot.data![i].seatnumber!),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          removeBooking(snapshot.data![i].id);
+                        },
+                      ),
+                      onTap: () => Navigator.pushNamed(context, EditBookingsScreen.routeName, arguments: snapshot.data![i]),
+                    );
+                  },
+                    itemCount: snapshot.data!.length,
+                    separatorBuilder: (ctx, i) {
+                      return Divider(height: 3, color: Colors.blueGrey);
+                    },
+                  );
+                }
+              )
             ],
           ),
           floatingActionButton: FloatingActionButton(

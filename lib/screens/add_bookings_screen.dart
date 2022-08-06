@@ -49,6 +49,7 @@ class _AddBookingsScreenState extends State<AddBookingsScreen> {
       setState(() {
         dateofbooking = null;
       });
+      Navigator.of(context).pushNamed(BookingsListScreen.routeName);
 
       //show a snackbar
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -86,7 +87,7 @@ class _AddBookingsScreenState extends State<AddBookingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Bookings'),
-        actions: [IconButton(onPressed: () { saveForm(); Navigator.of(context).pushNamed(BookingsListScreen.routeName); }, icon: Icon(Icons.save))],
+        actions: [IconButton(onPressed: () { saveForm(); }, icon: Icon(Icons.save))],
       ),
       body: Container(
           padding: EdgeInsets.all(10),

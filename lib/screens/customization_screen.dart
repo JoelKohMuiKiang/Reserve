@@ -6,6 +6,14 @@ class CustomizationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Customization',
+          style: TextStyle(fontSize: 30),
+        ),
+      ),
+      body: Container()
+    );
   }
 }

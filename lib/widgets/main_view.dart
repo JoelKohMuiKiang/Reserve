@@ -36,10 +36,16 @@ class _MainScreenViewState extends State<MainScreenView> {
                     child: Divider(
                       height: 30,
                     )),
-                Align(
-                    alignment: Alignment.center,
-                    child: Image.network(
-                      snapshot.data!.profileImageUrl,
+                ClipOval(
+                  child: Image.network(snapshot.data!.profileImageUrl,
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,),
+                ),
+                Opacity(
+                    opacity: 0,
+                    child: Divider(
+                      height: 30,
                     )),
                 Container(
                     width: 350,
@@ -50,6 +56,11 @@ class _MainScreenViewState extends State<MainScreenView> {
                         fontSize: 30,
                       ),
                     )),
+                Opacity(
+                    opacity: 0,
+                child: Divider(
+                  height: 10,
+                ),),
                 ShowNextBookingWidget()
               ],
             );

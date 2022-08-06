@@ -1,9 +1,11 @@
 //this is a custom widget for my ListView so that my code in the main.dart looks cleaner
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reserve_newest1/models/bookings.dart';
 import 'package:reserve_newest1/screens/edit_bookings_screen.dart';
+import 'package:reserve_newest1/services/auth_services.dart';
 import 'package:reserve_newest1/services/firestore_services.dart';
 
 class BookingsList extends StatefulWidget {
@@ -14,6 +16,17 @@ class BookingsList extends StatefulWidget {
 
 class _BookingsListState extends State<BookingsList> {
   FireStoreServices fsServices = FireStoreServices();
+  AuthService authService = AuthService();
+
+  Stream<List<Bookings>> getBookings() {
+    return FirebaseFirestore.instance
+        .collection('bookings')
+        .where('email', isEqualTo: authService.getCurrentUser()!.email)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map<Bookings> ((doc) => Bookings.fromMap(doc.data(), doc.id))
+        .toList());
+  }
 
   //function to remove bookings from the list
   removeBooking(String? id) {

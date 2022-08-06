@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:reserve_newest1/models/bookings.dart';
 import 'package:reserve_newest1/services/firestore_services.dart';
 
@@ -38,10 +39,12 @@ class _ShowNextBookingWidgetState extends State<ShowNextBookingWidget> {
           return Center(child: CircularProgressIndicator());
         else {
           return Container(
+            width: 330,
               child: Text(snapshot.data![0].startofbooking == null || snapshot.data![0].endofbooking == null || snapshot.data![0].level == null || snapshot.data![0].seatnumber == null || snapshot.data![0].dateofbooking == null
                   ? 'Next Booking Slot: -':
               "Next Booking Slot: " + snapshot.data![0].startofbooking! + ' - ' + snapshot.data![0].endofbooking! + ', '
-              + snapshot.data![0].level! + ', ' + snapshot.data![0].seatnumber! + ', ' + snapshot.data![0].dateofbooking!.toString())
+              + snapshot.data![0].level! + ', ' + snapshot.data![0].seatnumber! + ', ' + DateFormat('EEEE, dd/MM/yyyy').format(snapshot.data![0].dateofbooking!),
+                style: TextStyle(fontSize: 20), textAlign: TextAlign.center,)
           );
         }
       }

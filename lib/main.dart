@@ -21,15 +21,44 @@ import 'package:reserve_newest1/services/firestore_services.dart';
 import 'package:reserve_newest1/services/user_services.dart';
 import 'package:reserve_newest1/widgets/app_drawer.dart';
 import 'package:reserve_newest1/widgets/bookings_list.dart';
+import 'package:reserve_newest1/widgets/dark_mode.dart';
+import 'package:reserve_newest1/widgets/dark_mode_manager.dart';
 import 'package:reserve_newest1/widgets/main_view.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+DarkModeManager darkModeManager = DarkModeManager();
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   //declaring and initializing an AuthService
   AuthService authService = AuthService();
+
+  @override
+  void dispose() {
+    darkModeManager.removeListener(themeListener);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    darkModeManager.addListener((themeListener));
+    super.initState();
+  }
+
+  themeListener(){
+    if(mounted){
+      setState(() {
+
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +70,7 @@ class MyApp extends StatelessWidget {
         stream: authService.getAuthUser(),
         builder: (context, snapshot) {
           return MaterialApp(
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
+            theme: lightTheme, darkTheme: darkTheme, themeMode: darkModeManager.themeMode,
             home: snapshot.connectionState == ConnectionState.waiting?
               Center(child: CircularProgressIndicator()) :
               snapshot.hasData? MainScreen(): AuthScreen(),
@@ -84,6 +111,9 @@ class _MainScreenState extends State<MainScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text('Reserve'),
+            actions: [Switch(value: darkModeManager.themeMode == ThemeMode.dark, onChanged: (newValue){
+              darkModeManager.toggleTheme(newValue);
+            })],
           ),
           body: MainScreenView(),
           drawer: AppDrawer(),
