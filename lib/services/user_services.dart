@@ -12,11 +12,12 @@ class UserServices {
   final CollectionReference userData = FirebaseFirestore.instance.collection('user');
 
   //function to create a new record in the 'user' collection for that user to store their data into
-  Future updateUserData(String name, String matrixNumber, int? mobileNumber) async {
+  Future updateUserData(String name, String matrixNumber, int? mobileNumber, String profileImageUrl) async {
     return await userData.doc(uid).set({
       'name': name,
       'matrixNumber': matrixNumber,
       'mobileNumber': mobileNumber,
+      'profileImage': profileImageUrl
     });
   }
 
@@ -34,7 +35,7 @@ class UserServices {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     Users? users;
     return FirebaseFirestore.instance.doc('user/' + uid).snapshots().map((value) {
-      users = Users(id: uid, name: value.get('name'), matrixNumber: value.get('matrixNumber'), mobileNumber: value.get('mobileNumber'));
+      users = Users(id: uid, name: value.get('name'), matrixNumber: value.get('matrixNumber'), mobileNumber: value.get('mobileNumber'), profileImageUrl: value.get('profileImage'));
       return users!;
     });
   }

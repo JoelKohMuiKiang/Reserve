@@ -16,7 +16,7 @@ class _BookingsListState extends State<BookingsList> {
   FireStoreServices fsServices = FireStoreServices();
 
   //function to remove bookings from the list
-  void removeBooking(String? id) {
+  removeBooking(String? id) {
     showDialog<Null>(
         context: context,
         builder: (context) {
@@ -44,10 +44,12 @@ class _BookingsListState extends State<BookingsList> {
     return StreamBuilder<List<Bookings>>(
       stream: fsServices.getBookings(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
-        else {
+        } else {
+          print(snapshot.data.toString());
           return ListView.separated(
+            shrinkWrap: true,
             itemBuilder: (ctx, i) {
               return ListTile(
                 leading: Icon(Icons.access_alarm),

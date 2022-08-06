@@ -6,6 +6,7 @@ import 'package:reserve_newest1/models/user_data.dart';
 import 'package:reserve_newest1/services/auth_services.dart';
 import 'package:reserve_newest1/services/firestore_services.dart';
 import 'package:reserve_newest1/services/user_services.dart';
+import 'package:reserve_newest1/widgets/show_next_booking.dart';
 
 class MainScreenView extends StatefulWidget {
   @override
@@ -19,38 +20,39 @@ class _MainScreenViewState extends State<MainScreenView> {
 
   @override
   Widget build(BuildContext context) {
-      return StreamBuilder<Users>(
+    return StreamBuilder<Users>(
         stream: databaseServices.getUser(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          else {
-            {
-              return Column(
-                children: [
-                  Opacity(
-                      opacity: 0,
-                      child: Divider(
-                        height: 30,
-                      )),
-                  Align(
-                      alignment: Alignment.center,
-                      child: Icon(
-                        Icons.account_circle,
-                        size: 150,
-                      )),
-                  Container(
-                      width: 350,
-                      child: Text(
-                        'Welcome ' + snapshot.data!.name + '!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 30,
-                        ),
-                      )),
-                ],
-              );
-            }
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()))    ;
+          } else {
+            print(snapshot.data!.profileImageUrl);
+            return Column(
+              children: [
+                Opacity(
+                    opacity: 0,
+                    child: Divider(
+                      height: 30,
+                    )),
+                Align(
+                    alignment: Alignment.center,
+                    child: Image.network(
+                      snapshot.data!.profileImageUrl,
+                    )),
+                Container(
+                    width: 350,
+                    child: Text(
+                      'Welcome ' + snapshot.data!.name + '!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),
+                    )),
+                ShowNextBookingWidget()
+              ],
+            );
           }
         });
   }

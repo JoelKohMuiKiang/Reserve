@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
               NotificationScreen.routeName: (_) { return NotificationScreen(); },
               HelpScreen.routeName: (_) { return HelpScreen(); },
               FeedbackScreen.routeName: (_) { return FeedbackScreen(); },
-              AddUserInfoScreen.routeName: (_) {return AddUserInfoScreen(); }
+              AddUserInfoScreen.routeName: (_) {return AddUserInfoScreen(); },
           });
         }
       )

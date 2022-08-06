@@ -15,6 +15,12 @@ class _CalendarViewState extends State<CalendarView> {
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
 
+  @override
+  void initState() {
+    selectedBookings = {};
+    super.initState();
+  }
+
   List<Bookings> _getBookingsfromDay(DateTime date) {
     return selectedBookings[date]??[];
   }

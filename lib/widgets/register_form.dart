@@ -35,7 +35,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
       AuthService authService = AuthService();
 
-      return authService.registerWithEmailAndPassword(email!, password!).then((value) {
+      authService.registerWithEmailAndPassword(email!, password!).then((value) {
         FocusScope.of(context).unfocus();
       }).catchError((error) {
         FocusScope.of(context).unfocus();

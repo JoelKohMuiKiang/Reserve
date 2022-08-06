@@ -18,7 +18,7 @@ class AuthService{
       User? user = result.user;
 
       //create a new document for the user with the uid
-      await UserServices(uid: user!.uid).updateUserData('name', 'matrixNumber', 90604154);
+      await UserServices(uid: user!.uid).updateUserData('name', 'matrixNumber', 90604154, '');
 
       return _userFromFirebaseUser(user);
     } catch(e) {

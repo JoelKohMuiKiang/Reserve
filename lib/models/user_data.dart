@@ -3,12 +3,14 @@ class Users {
   final String name;
   final String matrixNumber;
   final int mobileNumber;
+  final String profileImageUrl;
 
-  Users({ required this.id, required this.name, required this.matrixNumber, required this.mobileNumber});
+  Users({ required this.id, required this.name, required this.matrixNumber, required this.mobileNumber, required this.profileImageUrl});
 
   Users.fromMap(Map <String, dynamic> snapshot, String id):
       id = id,
       name = snapshot['name'] ?? '',
       matrixNumber = snapshot['matrixNumber'] ?? '',
-      mobileNumber = snapshot['mobileNumber'] ?? '';
+      mobileNumber = snapshot['mobileNumber'] ?? '',
+      profileImageUrl = snapshot['profileImage'] ?? '';
 }

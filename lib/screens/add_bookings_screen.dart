@@ -7,8 +7,11 @@ import 'package:reserve_newest1/screens/bookings_list_screen.dart';
 import 'package:reserve_newest1/services/firestore_services.dart';
 
 class AddBookingsScreen extends StatefulWidget {
-  //route name for the Add Bookings Screen
+    //route name for the Add Bookings Screen
   static String routeName = '/add-bookings';
+
+  // final DateTime selectedDate;
+  // const AddBookingsScreen({Key? key, required this.selectedDate}) : super(key: key);
 
   @override
   State<AddBookingsScreen> createState() => _AddBookingsScreenState();
@@ -27,10 +30,11 @@ class _AddBookingsScreenState extends State<AddBookingsScreen> {
 
   DateTime? dateofbooking;
 
+  DateTime? selectedDay = DateTime.now();
+
   void saveForm() {
     bool isValid = form.currentState!.validate();
     if (isValid) {
-      if (dateofbooking == null) dateofbooking = DateTime.now();
       print(startofbooking);
       print(endofbooking);
       print(level);
@@ -67,8 +71,17 @@ class _AddBookingsScreenState extends State<AddBookingsScreen> {
     });
   }
 
+  String getDate() {
+    if (dateofbooking == null){
+      dateofbooking = selectedDay;
+      return 'Picked Date: ' + DateFormat('EEEE, dd/MM/yyyy').format(selectedDay!);
+    }
+      return "Picked date: " + DateFormat('EEEE, dd/MM/yyyy').format(dateofbooking!);
+  }
+
   @override
   Widget build(BuildContext context) {
+    selectedDay = ModalRoute.of(context)!.settings.arguments as DateTime;
 
     return Scaffold(
       appBar: AppBar(
@@ -213,10 +226,7 @@ class _AddBookingsScreenState extends State<AddBookingsScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(dateofbooking == null
-                        ? 'Date: '
-                        : "Picked date: " +
-                        DateFormat('dd/MM/yyyy').format(dateofbooking!)),
+                    Text(getDate()),
                     TextButton(
                         child: Text('Choose Date',
                             style: TextStyle(fontWeight: FontWeight.bold)),
