@@ -128,6 +128,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
           ),
           body: Column(
             children: [
+              //calendar function
               TableCalendar(
                 focusedDay: focusedDay,
                 firstDay: DateTime(2022),
@@ -226,6 +227,7 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
               )
             ],
           ),
+          //button to navigate me to the add_booking screen
           floatingActionButton: FloatingActionButton(
             onPressed: () {Navigator.of(context).pushNamed(AddBookingsScreen.routeName, arguments: selectedDay);},
             child: Icon(Icons.add)

@@ -50,7 +50,7 @@ class _EditBookingsScreenState extends State<EditBookingsScreen> {
 
       //show a snackbar
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Booking Successful!'),
+        content: Text('Booking Edited!'),
       ));
 
 
@@ -231,7 +231,7 @@ class _EditBookingsScreenState extends State<EditBookingsScreen> {
                     Text(dateofbooking == null
                         ? 'Date: '
                         : "Picked date: " +
-                        DateFormat('dd/MM/yyyy').format(dateofbooking!)),
+                        DateFormat('EEEE, dd/MM/yyyy').format(dateofbooking!)),
                     TextButton(
                         child: Text('Choose Date',
                             style: TextStyle(fontWeight: FontWeight.bold)),
